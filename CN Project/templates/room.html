@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="message-box">
+  <h2>Chat Room: {{ code }}</h2>
+  <div class="messages" id="messages">
+    {% for msg in messages %}
+      {% if msg.message %}
+        <div class="text">
+          <span>
+            <strong>{{ msg.name }}</strong>: {{ msg.message }}
+          </span>
+          <span class="muted">
+            {{ msg.timestamp }}
+          </span>
+        </div>
+      {% elif msg.image %}
+        <div class="image">
+          <span>
+            <strong>{{ msg.name }}</strong>:
+          </span>
+          <img src="data:image/jpeg;base64,{{ msg.image }}" alt="Image" style="max-width: 300px;">
+          <span class="muted">
+            {{ msg.timestamp }}
+          </span>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="inputs">
+    <input
+      type="text"
+      rows="3"
+      placeholder="Message"
+      name="message"
+      id="message"
+    />
+    <button type="button" name="send" id="send-btn">
+      Send
+    </button>
+    <input type="file" id="file-input" accept="image/*">
+    <button type="button" name="send" id="send-img-btn">
+      Send Image
+    </button>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var socketio = io();
+  const messagesDiv = document.getElementById("messages");
+
+  // Function to create message HTML element
+  const createMessage = (name, msg, timestamp) => {
+    const content = `
+    <div class="text">
+        <span>
+            <strong>${name}</strong>: ${msg}
+        </span>
+        <span class="muted">
+            ${timestamp}
+        </span>
+    </div>
+    `;
+    messagesDiv.innerHTML += content;
+  };
+
+  // Function to create image HTML element
+  const createImage = (name, imgUrl, timestamp) => {
+    const content = `
+    <div class="image">
+        <span>
+            <strong>${name}</strong>: 
+        </span>
+        <img src="${imgUrl}" alt="Image" style="max-width: 300px;">
+        <span class="muted">
+            ${timestamp}
+        </span>
+    </div>
+    `;
+    messagesDiv.innerHTML += content;
+  };
+
+  // Event listener for receiving text messages
+  socketio.on("message", (data) => {
+    if (data.message) {
+      createMessage(data.name, data.message, new Date().toLocaleString());
+    }
+  });
+
+  // Event listener for receiving image messages
+ 
+
+  // Function to send text message
+  document.getElementById("send-btn").addEventListener("click", () => {
+    const message = document.getElementById("message");
+    if (message.value == "") return;
+    socketio.emit("message", { data: message.value });
+    message.value = "";
+  });
+
+ // Event listener for receiving image messages
+socketio.on("image", (data) => {
+  if (data.image) {
+    createImage(data.name, 'data:image/jpeg;base64,' + data.image, new Date().toLocaleString());
+  }
+});
+
+
+// Function to send image
+document.getElementById("send-img-btn").addEventListener("click", () => {
+  const fileInput = document.getElementById('file-input');
+  const file = fileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageData = event.target.result;
+      socketio.emit('image', { data: imageData });
+      // Display the image in sender's chat window immediately
+      createImage("You", imageData, new Date().toLocaleString());
+    };
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+{% endblock %}

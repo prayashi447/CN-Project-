@@ -1,0 +1,89 @@
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.join {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.create-btn {
+  width: 100%;
+  background-color: #e74c3c; /* Red color for the send button */
+  color: white; /* Text color */
+  padding: 10px; /* Padding for the button */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add some border radius */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.message-box {
+  border-color: #3498db;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  align-items: stretch;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-image: url('/static/image/background.jpeg');  /* Use forward slash in the URL */
+  background-size: cover;
+  background-position: center;
+}
+
+
+.messages {
+  overflow-y: scroll;
+  flex: 1;
+  width: 100%;
+  padding: 10px; /* Add padding to the messages container */
+}
+
+.inputs {
+  padding: 10px;
+  display: flex;
+  background-color: #ecf0f1; /* Example input background color */
+  border-radius: 5px; /* Add border radius to the input container */
+}
+
+h2 {
+  text-align: center;
+  color: #fdfefe; /* Example heading color */
+}
+
+#message {
+  flex: 1;
+  border: none; /* Remove input border */
+  padding: 8px; /* Adjust input padding */
+  margin-right: 10px; /* Add some space to the right of the input */
+  border-radius: 3px; /* Add border radius to the input */
+}
+
+.text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #dff0d8; /* Light green background color */
+  border-radius: 8px; /* Increase border radius for a smoother appearance */
+}
+
+.muted {
+  font-size: 10px;
+  color: #777; /* Darker gray color for muted text */
+  margin-top: 5px; /* Add margin to the top of the muted text */
+}
